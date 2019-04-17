@@ -1,0 +1,29 @@
+.add-item-container {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+}
+.custom-inp-default {
+  flex-basis: 40%;
+}
+
+.search {
+  position: relative;
+  width: 60%;
+}
+
+.search-results {
+  position: absolute;
+  z-index: 10;
+  background-color: #f0f0f0 !important;
+  width: 100%;
+  font-size: 0.6em;
+  text-align: left;
+  margin-top: 5px;
+  box-shadow: 0px 2px 6px 0px #ccc;
+}
+
+.search-results .list-group-item {
+  background-color: #f0f0f0 !important;
+  cursor: default;
+}
