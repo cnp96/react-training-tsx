@@ -29,12 +29,9 @@ class AddToCart extends React.Component<AddToCartProps, AddToCartState> {
     const inputItemName = e.target.value.toLowerCase();
     const { itemsList } = this.props;
 
-    const searchList =
-      inputItemName === ""
-        ? []
-        : itemsList.filter(item =>
-            item.name.toLowerCase().startsWith(inputItemName)
-          );
+    const searchList = itemsList.filter(item =>
+      item.name.toLowerCase().startsWith(inputItemName)
+    );
 
     this.setState({ itemName: inputItemName, searchList });
   }

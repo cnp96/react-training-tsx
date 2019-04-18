@@ -18,7 +18,7 @@ const CartInfo: React.SFC<CartInfoProps> = props => {
   return (
     <React.Fragment>
       <div className="divider" />
-      <div className="cart-info-container center-v ml-auto">
+      <div className="animated slideIn cart-info-container center-v ml-auto">
         <div className="cart-info-row">
           <span className="text-muted center-v">Total Items: </span>
           <span className="text-active"> {items.length} </span>
