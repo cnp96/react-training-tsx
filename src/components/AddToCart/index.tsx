@@ -1,18 +1,24 @@
 import React from "react";
 import "./addToCart.css";
 
+interface SearchItemSchema {
+  id: string;
+  name: string;
+}
+
 export interface AddToCartProps {
   onAddItemClick: (name: string) => void;
-  itemsList: string[];
+  itemsList: SearchItemSchema[];
 }
 
 export interface AddToCartState {
   itemName: string;
-  searchList: string[];
+  itemId: string;
+  searchList: SearchItemSchema[];
 }
 
 class AddToCart extends React.Component<AddToCartProps, AddToCartState> {
-  state = { itemName: "", searchList: [] };
+  state = { itemName: "", itemId: "", searchList: [] };
 
   resetItemName() {
     this.setState({ itemName: "" });
@@ -20,30 +26,32 @@ class AddToCart extends React.Component<AddToCartProps, AddToCartState> {
 
   updateItemName(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
-    const itemName = e.target.value;
-    const itemNameInLower = itemName.toLowerCase();
+    const inputItemName = e.target.value.toLowerCase();
     const { itemsList } = this.props;
 
     const searchList =
-      itemName === ""
+      inputItemName === ""
         ? []
         : itemsList.filter(item =>
-            item.toLowerCase().startsWith(itemNameInLower)
+            item.name.toLowerCase().startsWith(inputItemName)
           );
 
-    this.setState({ itemName, searchList });
+    this.setState({ itemName: inputItemName, searchList });
   }
 
-  selectItemFromSearch(itemName: string) {
+  selectItemFromSearch(item: SearchItemSchema) {
+    const itemName = item.name;
+    const itemId = item.id;
     this.setState({
       itemName,
+      itemId,
       searchList: []
-    })
+    });
   }
 
   render() {
     const { onAddItemClick } = this.props;
-    const { searchList } = this.state;
+    const searchList: SearchItemSchema[] = [...this.state.searchList];
 
     const searchListContent =
       searchList.length === 0 ? (
@@ -52,8 +60,12 @@ class AddToCart extends React.Component<AddToCartProps, AddToCartState> {
         <div className="search-results">
           <ul className="list-group">
             {searchList.map((item, index) => (
-              <li key={index} className="list-group-item">
-                <a onClick={() => this.selectItemFromSearch(item)}>{item}</a>
+              <li
+                onClick={() => this.selectItemFromSearch(item)}
+                key={index}
+                className="list-group-item"
+              >
+                <a>{item.name}</a>
               </li>
             ))}
           </ul>
@@ -77,7 +89,7 @@ class AddToCart extends React.Component<AddToCartProps, AddToCartState> {
           className="btn btn-primary"
           onClick={() => {
             this.resetItemName();
-            onAddItemClick(this.state.itemName);
+            onAddItemClick(this.state.itemId);
           }}
         >
           Add Item

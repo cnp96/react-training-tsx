@@ -2,9 +2,12 @@ import React from "react";
 import "./cart.css";
 import AddToCart from "../AddToCart";
 
-export interface CartProps {}
+export interface CartProps {
+  items: ItemSchema[];
+}
 
 export interface ItemSchema {
+  id: string;
   name: string;
   quantity: number;
   price: number;
@@ -12,36 +15,49 @@ export interface ItemSchema {
 }
 
 export interface CartState {
-  items: ItemSchema[];
+  allItems: ItemSchema[];
+  cartItems: ItemSchema[];
 }
 
 class Cart extends React.Component<CartProps, CartState> {
   state = {
-    items: [
-      {
-        name: "Phillips Hair Dryer",
-        quantity: 12,
-        price: 1000,
-        discount: 100
-      }
-    ]
+    allItems: [...this.props.items],
+    cartItems: []
   };
 
   removeItem(index: number) {
-    const items = [...this.state.items];
-    items.splice(index, 1);
-    this.setState({ items });
+    const cartItems = [...this.state.cartItems];
+    cartItems.splice(index, 1);
+    this.setState({ cartItems });
+  }
+
+  addToCart(id: string) {
+    const allItems = [...this.state.allItems];
+
+    for (let i = 0; i < allItems.length; i++) {
+      if (allItems[i].id === id) {
+        const newItem = allItems.splice(i, 1)[0];
+        const cartItems: ItemSchema[] = [...this.state.cartItems];
+        cartItems.push(newItem);
+        this.setState({
+          allItems,
+          cartItems
+        });
+        break;
+      }
+    }
   }
 
   render() {
-    const { items } = this.state;
+    const allItems = [...this.state.allItems];
+    const cartItems = [...this.state.cartItems];
 
     const cartContent =
-      items.length === 0 ? (
+      cartItems.length === 0 ? (
         "Your cart is empty."
       ) : (
         <ul className="list-group">
-          {items.map((item: ItemSchema, index) => {
+          {cartItems.map((item: ItemSchema, index) => {
             return (
               <li key={index} className="card list-group-item">
                 <div className="center-v" style={{ width: "40%" }}>
@@ -78,7 +94,7 @@ class Cart extends React.Component<CartProps, CartState> {
       );
 
     const cartInfoContent =
-      items.length === 0 ? (
+      cartItems.length === 0 ? (
         ""
       ) : (
         <React.Fragment>
@@ -114,8 +130,8 @@ class Cart extends React.Component<CartProps, CartState> {
         <h3 className="title">Add to Cart Page</h3>
 
         <AddToCart
-          onAddItemClick={name => console.log(name)}
-          itemsList={items.map(item => item.name)}
+          onAddItemClick={id => this.addToCart(id)}
+          itemsList={allItems.map(item => ({ name: item.name, id: item.id }))}
         />
 
         <div className="list-items-container">{cartContent}</div>
