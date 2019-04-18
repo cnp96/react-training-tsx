@@ -1,10 +1,7 @@
 import React from "react";
 import "./cart.css";
 import AddToCart from "../AddToCart";
-
-export interface CartProps {
-  items: ItemSchema[];
-}
+import CartItem from "../CartItem";
 
 export interface ItemSchema {
   id: string;
@@ -12,6 +9,10 @@ export interface ItemSchema {
   quantity: number;
   price: number;
   discount: number;
+}
+
+export interface CartProps {
+  items: ItemSchema[];
 }
 
 export interface CartState {
@@ -22,13 +23,39 @@ export interface CartState {
 class Cart extends React.Component<CartProps, CartState> {
   state = {
     allItems: [...this.props.items],
-    cartItems: []
+    cartItems: new Array<ItemSchema>()
   };
 
-  removeItem(index: number) {
+  removeItem(id: string) {
+    const { cartItems, allItems } = this.state;
+    const newCartItems = cartItems.filter(item => item.id !== id);
+
+    const removedItem = this.props.items.filter(item => item.id === id)[0];
+    if (removedItem !== undefined) {
+      allItems.push(removedItem);
+    }
+    this.setState({ cartItems: newCartItems, allItems });
+  }
+
+  incrementItem(id: string) {
     const cartItems = [...this.state.cartItems];
-    cartItems.splice(index, 1);
-    this.setState({ cartItems });
+    for (let item of cartItems) {
+      if (item.id === id) {
+        item.quantity += 1;
+        this.setState({ cartItems });
+        break;
+      }
+    }
+  }
+  decrementItem(id: string) {
+    const cartItems = [...this.state.cartItems];
+    for (let item of cartItems) {
+      if (item.id === id && item.quantity > 1) {
+        item.quantity -= 1;
+        this.setState({ cartItems });
+        break;
+      }
+    }
   }
 
   addToCart(id: string) {
@@ -59,35 +86,13 @@ class Cart extends React.Component<CartProps, CartState> {
         <ul className="list-group">
           {cartItems.map((item: ItemSchema, index) => {
             return (
-              <li key={index} className="card list-group-item">
-                <div className="center-v" style={{ width: "40%" }}>
-                  <span className="text-muted">Item Name</span>
-                  <span className="text-active">{item.name}</span>
-                </div>
-
-                <div className="center-v">
-                  <span className="text-muted">Quantity</span>
-                  <div>
-                    <button className="btn btn-warning">-</button>
-                    <span className="text-active"> {item.quantity} </span>
-                    <button className="btn btn-success">+</button>
-                  </div>
-                </div>
-
-                <div className="center-v">
-                  <span className="text-muted">Price</span>
-                  <span className="text-active">Rs. {item.price}</span>
-                </div>
-
-                <div className="center-v">
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => this.removeItem(index)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </li>
+              <CartItem
+                key={index}
+                item={item}
+                onRemoveClick={id => this.removeItem(id)}
+                onDecrementClick={id => this.decrementItem(id)}
+                onIncrementClick={id => this.incrementItem(id)}
+              />
             );
           })}
         </ul>

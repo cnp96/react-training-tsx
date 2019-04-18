@@ -86,7 +86,7 @@ class AddToCart extends React.Component<AddToCartProps, AddToCartState> {
         </div>
         &nbsp;
         <button
-          className="btn btn-primary"
+          className="btn btn-md btn-primary m-0"
           onClick={() => {
             this.resetItemName();
             onAddItemClick(this.state.itemId);
