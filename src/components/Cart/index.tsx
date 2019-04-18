@@ -2,6 +2,7 @@ import React from "react";
 import "./cart.css";
 import AddToCart from "../AddToCart";
 import CartItem from "../CartItem";
+import CartInfo from "../CartInfo";
 
 export interface ItemSchema {
   id: string;
@@ -99,36 +100,7 @@ class Cart extends React.Component<CartProps, CartState> {
       );
 
     const cartInfoContent =
-      cartItems.length === 0 ? (
-        ""
-      ) : (
-        <React.Fragment>
-          <div className="divider" />
-          <div className="cart-info-container center-v ml-auto">
-            <div className="cart-info-row">
-              <span className="text-muted center-v">Total Items: </span>
-              <span className="text-active"> 1 </span>
-            </div>
-
-            <div className="cart-info-row">
-              <span className="text-muted center-v">Total Price: </span>
-              <span className="text-active"> Rs. 400 </span>
-            </div>
-
-            <div className="cart-info-row">
-              <span className="text-muted center-v">Discount Availed: </span>
-              <span className="text-active success"> - Rs. 100 </span>
-            </div>
-
-            <div className="cart-info-row">
-              <span className="text-muted center-v">Final Price: </span>
-              <span className="text-active bold"> Rs. 300 </span>
-            </div>
-
-            <button className="btn btn-primary">Proceed to checkout</button>
-          </div>
-        </React.Fragment>
-      );
+      cartItems.length === 0 ? "" : <CartInfo items={cartItems} />;
 
     return (
       <div className="container center-hv">

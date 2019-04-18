@@ -1,0 +1,30 @@
+.divider {
+  margin-top: 50px;
+  width: 120%;
+  border: 1px dashed #ccc;
+}
+.cart-info-container {
+  margin: 20px 0 0 0;
+  width: 40%;
+}
+.cart-info-container > button {
+  margin: 20px 0 0 auto !important;
+}
+.cart-info-row {
+  margin: 5px 0;
+  font-size: 0.9em;
+}
+.cart-info-row > .text-active {
+  margin: 0 !important;
+  float: right;
+}
+.cart-info-row > .text-muted {
+  float: left;
+}
+
+.bold {
+  font-weight: bold;
+}
+.success {
+  color: green;
+}
